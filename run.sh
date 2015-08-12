@@ -34,17 +34,27 @@ if [ -n "$nodes" ]
         -d port="SAME" -d username="${CB_USERNAME-admin}" -d password="${CB_PASSWORD-password}"
 
         curl -s -u ${CB_USERNAME-admin}:${CB_PASSWORD-password} -XPOST http://$leader/pools/default -d memoryQuota="${CB_MEMORY-256}"
-        curl -s -u ${CB_USERNAME-admin}:${CB_PASSWORD-password} -XPOST http://$leader/pools/default/buckets \
-        -d flushEnabled="1" \
-        -d replicaIndex="1" \
-        -d replicaNumber="2" \
-        -d name="default" \
-        -d bucketType="membase" \
-        -d ramQuotaMB="${CB_MEMORY-256}" \
-        -d evictionPolicy="valueOnly" \
-        -d authType="sasl" \
-        -d saslPassword="" \
-        -d threadsNumber="8"
+        if [ -z "$CB_AS_MEMCACHED" ]
+        then
+            curl -s -u ${CB_USERNAME-admin}:${CB_PASSWORD-password} -XPOST http://$leader/pools/default/buckets \
+            -d flushEnabled="1" \
+            -d replicaIndex="1" \
+            -d replicaNumber="2" \
+            -d name="default" \
+            -d bucketType="couchbase" \
+            -d ramQuotaMB="${CB_MEMORY-256}" \
+            -d evictionPolicy="valueOnly" \
+            -d authType="sasl" \
+            -d threadsNumber="8"
+        else
+            curl -s -u ${CB_USERNAME-admin}:${CB_PASSWORD-password} -XPOST http://$leader/pools/default/buckets \
+            -d flushEnabled="1" \
+            -d name="default" \
+            -d bucketType="memcached" \
+            -d ramQuotaMB="${CB_MEMORY-256}" \
+            -d authType="sasl" \
+            -d threadsNumber="8"
+        fi
         curl -s -u ${CB_USERNAME-admin}:${CB_PASSWORD-password} -XPOST http://$leader/settings/autoFailover -d enabled="true" -d timeout="120"
     fi
 
