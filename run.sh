@@ -3,7 +3,7 @@
 resp='HTTP/1.1 500 OK\r\n\r\nnok\n'; 
 
 check_couchbase () {
-    local nodes=$(curl -s -X GET http://${CONSUL_HOST}:8500/v1/catalog/service/couchbase | \
+    local nodes=$(curl -s -X GET http://${CONSUL_HOST}:8500/v1/catalog/service/couchbase\?tag=http | \
         jq -r '(.[] | .ServiceAddress + ":" + ( .ServicePort | tostring))' 2> /dev/null)
 local leader
 if [ -n "$nodes" ]
