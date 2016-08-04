@@ -19,7 +19,7 @@ if [ -n "$nodes" ]
 
     if [ -z "$leader" ]
         then
-        leader=$(echo $nodes | cut -d' ' -f 1)
+        leader=$(echo $nodes | head -1)
         if [ -z "$leader" ]
             then
             sleep 10
