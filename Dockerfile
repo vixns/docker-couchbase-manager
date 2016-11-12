@@ -1,4 +1,4 @@
 FROM vixns/base
-RUN apt-get update && apt-get install -y netcat && apt-get clean && rm -rf /var/lib/apt/lists/*
 COPY run.sh /run.sh
+COPY dig-srv.sh /dig-srv.sh
 ENTRYPOINT ["/run.sh"]
