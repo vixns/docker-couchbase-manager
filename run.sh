@@ -3,7 +3,7 @@
 CURL="curl --connect-timeout 1 -s"
 while true
 do
-    IPS="$(./dig-srv.sh $CB_HOSTNAME)"
+    IPS="$(/dig-srv.sh $CB_HOSTNAME)"
     leader=""
 
 # test if leader exists
